@@ -1,0 +1,44 @@
+<!-- renders tracks from supplied list -->
+<!-- LIST MUST NOT BE EXCEED 7 TRACKS -->
+
+
+<div class="container-fluid">
+    <div class="row list-row">
+        <div class="offset-1 col-10">
+            <div class="row">
+                {% for index in range(0, [4, artists|length]|min) %}
+                <!-- artist object -->
+                <div class="col-3 d-flex justify-content-center flex-nowrap align-items-center p-2">
+                    <div class="d-flex flex-column flex-nowrap track-object align-items-center p-4 pb-2" style="width: 200px">
+                        <img src="{{ artists[index].img_url }}" alt="Image not found" width="130px" height="130px" onerror="this.onerror=null;this.src='https://freemusicarchive.org/img/generic/album-default-lp-transparent.png';"/>
+                        <span class="artist-name pt-2">{{ artists[index].name }}</span>
+                        <span class="artist-track-count pt-2">{{ artists[index].track_count }}</span>
+                        <span class="artist-genres">{{ artists[index].genres }}</span>
+                        <a href=" {{ url_for('bp_browse.list_artist_tracks', resource_id=artists[index].artist_id, page_num=1) }} ">
+                            <span class="link"></span>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}    
+            </div>
+            {% if artists|length > 4 %}
+                <div class="row p-1">
+                    {% for index in range(4, [8, artists|length]|min) %}
+                    <!-- artist object -->
+                    <div class="col-3 d-flex justify-content-center flex-nowrap align-items-center p-2">
+                        <div class="d-flex flex-column track-object flex-nowarp align-items-center p-4" style="width: 200px">
+                            <img src="{{ artists[index].img_url }}" alt="Image not found" width="130px" height="130px" onerror="this.onerror=null;this.src='https://freemusicarchive.org/img/generic/album-default-lp-transparent.png';"/>
+                            <span class="artist-name pt-2">{{ artists[index].name }}</span>
+                            <span class="artist-track-count pt-2">{{ artists[index].track_count }}</span>
+                            <span class="artist-genres">{{ artists[index].genres }}</span>
+                            <a href=" {{ url_for('bp_browse.list_artist_tracks', resource_id=artists[index].artist_id, page_num=1) }} ">
+                                <span class="link"></span>
+                            </a>    
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>

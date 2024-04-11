@@ -1,0 +1,35 @@
+<!-- renders reviews from supplied list -->
+<!-- LIST MUST NOT BE EXCEED 7 REVIEWS -->
+<div class="container">
+    <div class="row list-row">
+        {% for object in reviews %}
+            {% for review in object.list_of_reviews %}
+            <div class="row track-object">
+                <div class="offset-1 col-11">
+                    <div class="row">
+                        <div>
+                            <h1> Reviews </h1> 
+                        </div>
+                        <!-- track art -->
+                        <div class="">
+                            <img src="{{ review.track.track_img_url }}" alt="Image not found" width="60px" height="60px" onerror="this.onerror=null;this.src='https://freemusicarchive.org/img/generic/album-default-lp-transparent.png';"/>
+                        </div>
+                        <div> 
+                            <p> {{ review.track.title }}</p>
+                            <p> {{ review.track.artist.full_name }} </p>
+                            <p> {{ review.review_text }} </p>
+                            <p> {{ review.rating }}/5 stars</p>
+                            <p> Review was done by {{ object.user.user_name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% endfor %}
+    
+        <!-- empty space when tracks < 7 -->
+        {% if reviews|length < 7 %}
+            <div class="row" style="height: {{ (7 - reviews|length) * 75 }}px;"></div>
+        {% endif %}
+    </div>
+</div>

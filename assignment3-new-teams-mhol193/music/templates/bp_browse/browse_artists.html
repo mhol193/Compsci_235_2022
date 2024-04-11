@@ -1,0 +1,57 @@
+{% extends 'bp_browse/browse_tracks.html' %}
+
+{% block styles %}
+    {{ super() }}
+    {# these styles are specific to this page #}
+    .artist-name {
+        font-size: 20px;
+        font-weight: normal;
+        text-align: center;
+        height: 38px;
+        width: 130px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .artist-track-count {
+        font-size: 14px;
+        font-weight: regular;
+    }
+    .artist-genres {
+        font-size: 14px;
+        font-weight: lighter;
+    }
+
+
+    {# turns artist div into link #}
+    .link {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+    .link:hover {
+        color: #7e7e7e;
+    }
+{% endblock %}
+
+{% block header %}
+    <div class="row page-header align-items-end">
+        <div class="col-auto p-4">
+            <a class="btn tab unselected" href="{{ url_for('bp_browse.list_tracks', page_num=1) }}">Tracks</a>
+        </div>
+        <div class="col-auto p-4">
+            <a class="btn tab unselected" href="{{ url_for('bp_browse.list_albums', page_num=1) }}">Albums</a>
+        </div>
+        <div class="col-auto p-4">
+            <a class="btn tab selected" href="{{ url_for('bp_browse.list_artists', page_num=1) }}">Artists</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% include "partials/artist_list.html" %}
+    <!-- render navigation controls -->
+    {% import 'partials/nav_controls.html' as controls %}
+    {{ controls.render_nav_controls(curr_page, last_page_num) }}
+{% endblock %}

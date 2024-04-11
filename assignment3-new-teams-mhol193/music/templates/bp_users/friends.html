@@ -1,0 +1,50 @@
+{% extends 'bp_browse/browse_tracks.html' %}
+
+{% block styles %}
+    {{super()}}
+    .track-object .row {
+        height: 100%;
+    }
+        .friend-count, .fav-count {
+            color: #4e4e4e;
+        }
+    #no-tracks-error {
+        color: #3e3e3e;
+        width: 100%;
+        text-align: center;
+    }
+{% endblock %}
+
+{% block header %}
+<div class="row page-header align-items-end">
+    <div class="col-auto p-4">
+        {% if selected_tab == "curr_friends" %}
+            <a class="btn tab selected" href="{{ url_for('bp_users.list_friends', page_num=1) }}">Current Friends</a>
+        {% else %}
+            <a class="btn tab unselected" href="{{ url_for('bp_users.list_friends', page_num=1) }}">Current Friends</a>
+        {% endif %}
+    </div>
+    <div class="col-auto p-4">
+        {% if selected_tab == "requests" %}
+            <a class="btn tab selected" href="{{ url_for('bp_users.list_requests', page_num=1) }}">Requests</a>  
+        {% else %}
+            <a class="btn tab unselected" href="{{ url_for('bp_users.list_requests', page_num=1) }}">Requests</a>
+        {% endif %}
+    </div>
+    <div class="col-auto p-4">
+        {% if selected_tab == "find_friends" %}
+            <a class="btn tab selected" href="{{ url_for('bp_users.list_users', page_num=1) }}">Find Friends</a>
+        {% else %}
+            <a class="btn tab unselected" href="{{ url_for('bp_users.list_users', page_num=1) }}">Find Friends</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+    <!-- render list of objects -->
+    {% include "partials/user_list.html" %}
+    <!-- nav controls -->
+    {% import 'partials/nav_controls.html' as controls %}
+    {{ controls.render_nav_controls(curr_page, last_page_num) }}
+{% endblock content %}

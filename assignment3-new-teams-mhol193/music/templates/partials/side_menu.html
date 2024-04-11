@@ -1,0 +1,40 @@
+<!-- side navigation menu -->
+
+<div class="col-2 side-menu align-items-center">
+    <!-- login/register -->
+    <div id="login-section" class="list-group-flush">
+        {% if 'user_name' in session %}
+            <div class="list-group-item list-group-item-action">
+                <img width="100px" height="100px" src="{{ url_for('static', filename= ('profile_photos/' + session['profile_photo'])) }}">
+            </div>
+            {# user_name cannot exceed 6 characters #}
+            <div class="list-group-item pt-3">
+                <h3 class=""> Welcome</h3>
+                <h3>{{ session['user_name'] }}</h3> 
+            </div>
+            <div  class="list-group-item list-group-item-action">
+                <a id="logout-button" href="{{ url_for('bp_authentication.logout') }}">Logout</a>
+            </div>
+        {% else %}
+            <div class="list-group-item list-group-item-action">
+                <img width="100px" height="100px" src="{{ url_for('static', filename= 'profile_photos/default_w.png') }}">
+            </div>
+            <div class="list-group-item pt-3">
+                <a href="{{ url_for('bp_authentication.login') }}" class="list-group-item list-group-item-action">Login</a>
+            </div>
+            <div id="logout-button" class="list-group-item list-group-item-action">
+                <a href="{{ url_for('bp_authentication.register') }}" class="list-group-item list-group-item-action">Register</a>
+            </div>
+
+        {% endif %}
+    </div>
+    <!-- navigation -->
+    <div id="nav-section" class="list-group-flush">
+        <a href="{{ url_for('bp_browse.list_tracks', page_num=1) }}" class="list-group-item list-group-item-action">Browse</a>
+        <a href="{{ url_for('bp_search.search_data', search_by='Tracks') }}" class="list-group-item list-group-item-action">Search</a>
+    </div>
+    <div id="users-section" class="list-group-flush">
+        <a href="{{ url_for('bp_users.list_favourites', page_num=1) }}" class="list-group-item list-group-item-action">Favourites</a>
+        <a href="{{ url_for('bp_users.list_users', page_num=1) }}" class="list-group-item list-group-item-action">Friends</a>
+    </div>
+</div>

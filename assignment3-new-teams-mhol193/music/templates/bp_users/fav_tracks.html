@@ -1,0 +1,27 @@
+{% extends 'bp_browse/browse_tracks.html' %}
+
+{% block styles %}
+    {{super()}}
+    #no-tracks-error {
+        color: #3e3e3e;
+        width: 100%;
+        text-align: center;
+    }
+
+{% endblock %}
+
+{% block header %}
+    <div class="row page-header align-items-end">
+        <div class="col-auto p-4">
+            <span class="tab unselected p-2">Your favourite tracks</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <!-- render list of objects -->
+    {% include "partials/track_list.html" %}
+    <!-- render navigation controls -->
+    {% import 'partials/nav_controls.html' as controls %}
+    {{ controls.render_nav_controls(curr_page, last_page_num) }}
+{% endblock content %}

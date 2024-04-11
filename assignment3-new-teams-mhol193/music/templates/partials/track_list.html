@@ -1,0 +1,70 @@
+<!-- renders tracks from supplied list -->
+<!-- LIST MUST NOT BE EXCEED 7 TRACKS -->
+<div class="container">
+    <div class="row list-row">
+            {% if tracks|length == 0 %}
+            <div id="no-tracks-error" class="row">
+                <span>&ltNo favourites added yet&gt</span>
+            </div>
+            {% endif %}
+        {% for track in tracks %}
+        <div class="row align-items-center track-object">
+            <div class="offset-1 col-11">
+                <div class="row">
+                    <!-- track art -->
+                    <div class="col-1 d-flex align-items-center justify-content-center">
+                        <img src="{{ track.track_img_url }}" alt="Image not found" width="60px" height="60px" onerror="this.onerror=null;this.src='https://freemusicarchive.org/img/generic/album-default-lp-transparent.png';"/>
+                    </div>
+                    <!-- artist name -->
+                    <div class="col-2 d-flex align-items-center py-3">
+                        {% if track.artist_id is defined %} {# check if track has an artist #}
+                        <a href="{{ url_for('bp_browse.list_artist_tracks', resource_id=track.artist_id, page_num=1) }}" class="track-obj artist-name">{{ track.artist_name }}</a>
+                        {% else %}
+                        <a href="#" class="track-obj artist-name">{{ track.artist_name }}</a>
+                        {% endif %}
+                    </div>
+                    <!-- track title -->
+                    <div class="col-4 d-flex flex-column py-3">
+                        <span class="track-obj track-title">{{ track.title }}</span>
+                        {% if track.album_id is defined %} {# check if track is part of an album #}
+                        <a href="{{ url_for('bp_browse.list_album_tracks', resource_id=track.album_id, page_num=1) }}" class="track-obj album-title">{{ track.album_title }}</a>
+                        {% else %}
+                        <a href="#" class="track-obj album-title">{{ track.album_title }}</a>
+                        {% endif %}
+                    </div>
+                    <!-- add to fav button (changes to remove button if already favourited) -->
+                    <div class=" fav-btn col-1 d-flex align-items-center justify-content-center py-3">
+                        {% if track.is_favourite %}
+                            <a href="{{ url_for('bp_users.remove_track_from_fav', track_id=track.track_id) }}" class="btn"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                        {% else %}
+                            <a href="{{ url_for('bp_users.add_track_to_fav', track_id=track.track_id) }}" class="btn"><i class="fa-solid fa-plus fa-lg"></i></a>
+                        {% endif %}
+                    </div>
+                    <!-- track duration -->
+                    <div class="col-1 d-flex align-items-center justify-content-center py-3">
+                        <span>{{ track.track_duration }}</span>
+                    </div>
+                    <!-- rating stars -->
+                    <div id="rating-stars" class="col-2 d-flex flex-row align-items-center justify-content-center py-3">
+                        {% for filled_star in range(track.user_rating) %}
+                            <p>&#9733;</p>
+                        {% endfor %}
+                        {% for empty_star in range(5 - track.user_rating) %}
+                            <p>&#9734;</p>
+                        {% endfor %}
+                    </div>
+                    <!-- div link -->
+                    <a href=" {{ url_for('bp_browse.track_page', resource_id=track.track_id, page_num=1) }} ">
+                        <span class="link"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    
+        <!-- empty space when tracks < 7 -->
+        {% if tracks|length < 7 %}
+            <div class="row" style="height: {{ (7 - tracks|length) * 75 }}px;"></div>
+        {% endif %}
+    </div>
+</div>

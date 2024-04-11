@@ -1,0 +1,131 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+{{ super() }}
+{# These styles are specific to this page #}    
+#content-container {
+    height: 100%;
+}
+#content-row {
+    width: 100%;
+    height: fit-content;
+}
+#search-form{
+    width: 100%;
+}
+    {# search field #}
+    #search-field {
+        font-size: 20px;
+        height: 58px;
+        width: 100%;
+        border-radius: 5px 0 0 5px;
+        background-color: var(--darkgray);
+        border: black;
+        color: white;
+    }
+    .search-btn {
+        width: 105px;
+        border-radius: 0 5px 5px 0;
+    }
+        {# search by dropdown #}
+        .searchBy-btn {
+            height: 58px;
+            border-radius: 0;
+            border-right: none;
+            width: 90px;
+        }
+        .searchBy-btn:focus, .searchBy-btn:hover, .btn.show:hover, .btn.show:focus {
+            background-color: var(--darkgray);
+            box-shadow: none;
+        }
+        .dropdown-item:active {
+            background-color: var(--darkgray);
+        }
+
+    {# for genre filters #}
+    #genres-container {
+        padding-top: 30px;
+    }
+    .filter-col {
+        padding-left: 80px;
+    }
+        {# override bootstrap checkbox colours #}
+        .form-check-input{
+            background-color: lightslategray;
+        }
+        .form-check-input:checked{
+            background-color: var(--darkgray) !important;
+            border: 0;
+        }
+        .form-check-input:focus, .label::after, label.form-check-label:focus, .form-check-input::after, .form-check-input:not(:disabled):not(.disabled):active:focus {
+            color: black;
+            outline: 0;
+            border: 0;
+            box-shadow: 0 0 0 0.1rem var(--darkgray) !important;
+        }
+{% endblock %}
+
+
+{% block content %}
+    {% if form.errors %}
+        {{ form.errors }}
+    {% else %}
+    <div id="content-container" class="container-fluid d-flex align-items-center" >
+        <div id="content-row" class="row d-flex justify-content-center">     
+            <div class="col-10">
+                <form method="POST" id="search-form">
+                    <!-- CSRF token -->
+                    {{ form.hidden_tag() }}
+                    <!-- search field with search-by button -->
+                    <div class="d-flex flex-row">
+                        {{ form.search_field(class="form-control my-3", id="search-field", placeholder="Search here...") }}
+                        <div class="dropdown">
+                            <button class="searchBy-btn btn btn-outline-dark dropdown-toggle my-3" type="button" id="searchByMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ search_by_param }}
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="searchByMenu">
+                                <li><a class="dropdown-item" type="button" href="{{ url_for('bp_search.search_data', search_by='Tracks') }}">Tracks</a></li>
+                                <li><a class="dropdown-item" type="button" href="{{ url_for('bp_search.search_data', search_by='Albums') }}">Albums</a></li>
+                                <li><a class="dropdown-item" type="button" href="{{ url_for('bp_search.search_data', search_by='Artists') }}">Artists</a></li>
+                            </ul>
+                        </div>
+                        {{ form.submit_field(class="search-btn btn btn-outline-dark my-3") }}
+                    </div>
+                    <!-- genre filters -->
+                    <div class="container" id="genres-container">
+                        <div class="row">
+                            {% set col_1_length = genres|length // 3 %}
+                            {% set col_2_length = col_1_length * 2 %}
+                            <div class="col-4 filter-col">
+                                {% for genre in genres[:col_1_length] %}
+                                <div class="form-check">
+                                    {{ form[genre.name](class="form-check-input", type="checkbox", value="True", id=genre.name) }}
+                                    {{ form[genre.name].label(class="form-check-label", for=genre.name) }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-4 filter-col">
+                                {% for genre in genres[col_1_length: col_2_length] %}
+                                <div class="form-check">
+                                    {{ form[genre.name](class="form-check-input", type="checkbox", value="True", id=genre.name) }}
+                                    {{ form[genre.name].label(class="form-check-label", for=genre.name) }}
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <div class="col-4 filter-col">
+                                {% for genre in genres[col_2_length:] %}
+                                <div class="form-check">
+                                    {{ form[genre.name](class="form-check-input", type="checkbox", value="True", id=genre.name) }}
+                                    {{ form[genre.name].label(class="form-check-label", for=genre.name) }}
+                                </div>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+{% endblock content%}

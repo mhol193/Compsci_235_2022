@@ -1,0 +1,59 @@
+<!-- renders users from supplied list -->
+<!-- LIST MUST NOT BE EXCEED 7 ALBUMS -->
+
+<div class="container">
+    <div class="row list-row">
+    {% if users|length == 0 %}
+        <div id="no-tracks-error" class="row">
+            <span>&ltNothing to show&gt</span>
+        </div>
+    {% endif %}
+    {% for user in users %}
+        <div class="row track-object">
+            <div class="offset-1 col-11">
+                <div class="row user-row">
+                    <!-- profile pic -->
+                    <div class="col-1 d-flex align-items-center justify-content-center">
+                        <img width="60px" height="60px" src="{{ url_for( 'static', filename= ('profile_photos/' + user.profile_photo) ) }}">
+                    </div>
+                    <!-- User name -->
+                    <div class="col-5 d-flex align-items-center flex-nowrap py-3">
+                        <span class="track-obj track-title"><i>{{ user.user_name }}</i></span>
+                    </div>
+                    <!-- accept button -->
+                    <div class=" fav-btn col-1 d-flex align-items-center justify-content-center py-3">
+                        {% if selected_tab == "requests" %}
+                            <a title="accept" href="{{ url_for('bp_users.accept_request', request_u_name=user.user_name) }}" class="btn"><i class="fa-solid fa-check fa-lg"></i></a>
+                        {% endif %}
+                    </div>
+                    <!-- send request button (changes to cancel or decline button) -->
+                    <div class=" fav-btn col-1 d-flex align-items-center justify-content-center py-3">
+                        {% if user.is_request %}
+                            <a title="cancel request" href="{{ url_for('bp_users.cancel_request', request_u_name=user.user_name) }}" class="btn"><i class="fa-regular fa-rectangle-xmark fa-xl"></i></a>
+                        {% elif selected_tab == "requests" %}
+                            <a title="decline" href="{{ url_for('bp_users.decline_request', request_u_name=user.user_name) }}" class="btn"><i class="fa-solid fa-xmark fa-lg"></i></a>
+                        {% elif selected_tab == "find_friends" %}
+                            <a title="add friend" href="{{ url_for('bp_users.friend_request', friend_u_name=user.user_name) }}" class="btn"><i class="fa-solid fa-user-plus fa-lg"></i></a>
+                        {% elif selected_tab == "curr_friends" %}
+                            <a title="remove friend" href="{{ url_for('bp_users.unfriend_user', friend_u_name=user.user_name) }}" class="btn"><i class="fa-solid fa-user-minus fa-lg"></i></a>
+                        {% endif %}
+                    </div>
+                    <!-- friends count -->
+                    <div class="col-auto d-flex flex-row align-items-center py-3">
+                        <span class="friend-count">{{ user.friend_count }} friends(s)</span>
+                    </div>
+                    <!-- liked tracks count -->
+                    <div class="col-auto d-flex flex-row align-items-center py-3 px-3">
+                        <span class="fav-count">{{ user.fav_tracks_count }} liked tracks(s)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        <!-- empty space when tracks < 7 -->
+        {% if users|length < 7 %}
+            <div class="row" style="height: {{ (7 - users|length) * 75 }}px;"></div>
+        {% endif %}
+    </div>
+
+</div>

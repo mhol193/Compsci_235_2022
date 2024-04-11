@@ -1,0 +1,51 @@
+<!-- renders albums from supplied list -->
+<!-- LIST MUST NOT BE EXCEED 7 ALBUMS -->
+
+<div class="container">
+    <div class="row list-row">
+
+        {% for album_dto in albums %}
+        <div class="row track-object">
+            <div class="offset-1 col-11">
+                <div class="row">
+                    <!-- album art -->
+                    <div class="col-1 d-flex align-items-center justify-content-center">
+                        <img src="{{ album_dto.img_url }}" alt="Image not found" width="60px" height="60px" onerror="this.onerror=null;this.src='https://freemusicarchive.org/img/generic/album-default-lp-transparent.png';"/>
+                    </div>
+                    <!-- artist name -->
+                    <div class="col-2 d-flex align-items-center flex-nowrap py-3">
+                        {% if album_dto.artist_id is defined %}
+                            <a class="album-obj artist-name" href="{{ url_for('bp_browse.list_artist_tracks', resource_id=album_dto.artist_id, page_num=1) }}">{{ album_dto.artist_name }}</a>
+                        {% else %}
+                            <a class="album-obj artist-name" href="#">{{ album_dto.artist_name }}</a>
+                        {% endif %}
+                    </div>
+                    <!-- album title -->
+                    <div class="col-5 d-flex flex-column flex-nowrap py-3">
+                        <span class="album-obj album-title">{{ album_dto.title }}</span>
+                        <span class="album-obj release-year">{{ album_dto.release_year }}</span>
+                    </div>
+                    <!-- album duration -->
+                    <div class="col-1 d-flex align-items-center justify-content-center py-3">
+                        <span>{{ album_dto.album_duration }}</span>
+                    </div>
+                    <!-- track count -->
+                    <div class="col-auto d-flex flex-row align-items-center py-3">
+                        <span>{{ album_dto.track_count }}</span>
+                    </div>
+                    <!-- div link -->
+                    <a href=" {{ url_for('bp_browse.list_album_tracks', resource_id=album_dto.album_id, page_num=1) }} ">
+                        <span class="link"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- empty space when tracks < 7 -->
+        {% if albums|length < 7 %}
+            <div class="row" style="height: {{ (7 - albums|length) * 75 }}px;"></div>
+        {% endif %}
+    </div>
+
+</div>

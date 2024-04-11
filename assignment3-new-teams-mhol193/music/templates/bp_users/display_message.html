@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+    {{ super() }}
+    #main {
+        padding-top: 100px;
+        padding-left: 50px;
+    }
+    #main h1 {
+        text-align: center;
+    }
+    #main .go-back-button {
+        width: 100px;
+    }
+    #main .btn:hover, #main .btn:focus {
+        background-color: var(--darkgray)
+    }
+{% endblock %}
+
+{% block content %}
+<div id="main" class="container-fluid">
+    <div class="d-flex flex-column align-items-center">
+        <h1>{{ message }}</h1>
+        <div class="go-back-button pt-4">
+            <button class="btn btn-outline-dark" onclick="history.back()" type="button">Go back</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'bp_browse/browse_tracks.html' %}
+
+{% block styles %}
+    {{super()}}
+{% endblock %}
+
+{% block header %}
+    <div class="row page-header align-items-end">
+        <div class="col-auto p-4">
+            <span class="tab selected">Recent Activity</span>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h1> See what your followers think! </h1>
+    <!-- render list of objects -->
+    {% include "partials/review_list.html" %}
+{% endblock content %}

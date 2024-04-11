@@ -1,0 +1,71 @@
+<!-- This macro should be used by any page that requires navigation buttons to shift through entries -->
+<!-- It takes the current page number, the last page number, and an optional artist/album id as parameters -->
+{% macro render_nav_controls(curr_page, last_page_num, res_id=-1) %}
+    <div class="container px-5 justify-content-center">
+        <div class="d-flex flex-row align-items-center justify-content-center page-nav-btn">
+
+            <!-- disable prev buttons on first page -->
+            {% if curr_page == 1 or last_page_num == 0 %}
+                <a class="btn disabled" style="border-color:lightslategray;">
+                    <i class="fa-solid fa-angles-left fa-xl"></i>
+                </a>
+                <a class="btn disabled" style="border-color:lightslategray;">
+                    <i class="fa-solid fa-angle-left fa-xl"></i>
+                </a>
+            {% else %}
+                <!-- Supply extra url parameter if displaying tracks of specific album/artist id -->
+                {% if res_id > -1 %}
+                    <a class="btn" href="{{ url_for(request.endpoint, resource_id=res_id, page_num=1) }}">
+                        <i class="fa-solid fa-angles-left fa-xl"></i>
+                    </a>            
+                    <a class="btn" href="{{ url_for(request.endpoint, resource_id=res_id, page_num=curr_page-1) }}">
+                        <i class="fa-solid fa-angle-left fa-xl"></i>
+                    </a>
+                {% else %}
+                    <a class="btn" href="{{ url_for(request.endpoint, page_num=1) }}">
+                        <i class="fa-solid fa-angles-left fa-xl"></i>
+                    </a>            
+                    <a class="btn" href="{{ url_for(request.endpoint, page_num=curr_page-1) }}">
+                        <i class="fa-solid fa-angle-left fa-xl"></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            <!-- disable next buttons on last page -->
+            {% if curr_page == last_page_num or last_page_num == 0 %}
+                <a class="btn disabled" style="border-color:lightslategray;">
+                    <i class="fa-solid fa-angle-right fa-xl"></i>
+                </a>
+                <a class="btn disabled" style="border-color:lightslategray;">
+                    <i class="fa-solid fa-angles-right fa-xl"></i>
+                </a>
+            {% else %}
+                <!-- Supply extra url parameter if displaying tracks of specific album or artist -->
+                {% if res_id > -1 %}
+                    <a class="btn" href="{{ url_for(request.endpoint, resource_id=res_id, page_num=curr_page+1) }}">
+                        <i class="fa-solid fa-angle-right fa-xl"></i>
+                    </a>
+                    <a class="btn" href="{{ url_for(request.endpoint, resource_id=res_id, page_num=last_page_num) }}">
+                        <i class="fa-solid fa-angles-right fa-xl"></i>
+                    </a>
+                {% else %}
+                    <a class="btn" href="{{ url_for(request.endpoint, page_num=curr_page+1) }}">
+                        <i class="fa-solid fa-angle-right fa-xl"></i>
+                    </a>
+                    <a class="btn" href="{{ url_for(request.endpoint, page_num=last_page_num) }}">
+                        <i class="fa-solid fa-angles-right fa-xl"></i>
+                    </a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- display page numbers -->
+        <div class="d-flex flex-row justify-content-center mt-1">
+            {% if last_page_num == 0 %}
+                <span>{{ 0 }} of {{ last_page_num }}</span>
+            {% else %}
+                <span>{{ curr_page }} of {{ last_page_num }}</span>
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}

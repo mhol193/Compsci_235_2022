@@ -1,0 +1,136 @@
+{% extends 'layout.html' %}
+
+{% block styles %}
+    {{ super() }}
+    .track-info {
+        padding: 100px 30px;
+    }
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            padding: 10px 0;
+        }
+        table {
+            width: 80%;
+            font-size: 14px;
+        }
+        tr {
+            vertical-align: top;
+        }
+        .btn {
+            width: 100%;
+        }
+        .goto-btns {
+            padding-top: 20px;
+        }
+
+    .reviews {
+        padding: 100px 100px;
+    }
+        .review-object {
+            padding-top: 30px;
+            height: 500px;
+        }
+            .user_name, .rating {
+                font-size: 14px;
+                color: #2e2e2e;
+            }
+            .stars {
+                font-size: 24px;
+                color: #2e2e2e;
+            }
+            p {
+                margin: 0;
+            }
+            #text-area {
+                border: 1px solid black;
+                border-radius: 10px;
+                background-color: var(--darkgray); 
+                color: white;
+                margin-top: 10px;
+                padding: 20px;
+                height: 300px;
+            }
+            #submit-btn {
+                width: 80px;
+            }
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row g-2">
+            <div class="col-3 d-flex flex-column track-info align-items-center">
+                <img class="art" src="{{ track.track_img_url }}" alt="Image not found" width="155px" height="155px" onerror="this.onerror=null;this.src='https://freemusicarchive.org/img/generic/album-default-lp-transparent.png';"/>
+                <span class="title">{{ track.title }}</span>
+                <table>
+                    <tr>
+                        <td><b>Album:</b></td>
+                        <td>{{track.album_title}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Artist:</b></td>
+                        <td>{{track.artist_name}}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Year:</b></td>
+                        <!-- <td>{{track.release_year}}</td> -->
+                    </tr>
+                    <tr>
+                        <td><b>Genres:</b></td>
+                        <!-- <td>{{track.release_year}}</td> -->
+                    </tr>
+                </table>
+                <div class="goto-btns">
+                    <a class="btn btn-outline-dark my-1" href="{{ url_for('bp_browse.list_album_tracks', resource_id=track.album_id, page_num=1) }}">Go to album</a>
+                    <a class="btn btn-outline-dark my-1" href="{{ url_for('bp_browse.list_artist_tracks', resource_id=track.artist_id, page_num=1) }}">Go to artist</a>
+                    {% if track.is_favourite %}
+                        <a class="btn btn-outline-dark my-1" href="{{ url_for('bp_users.remove_track_from_fav', track_id=track.track_id) }}">Remove from favourites</a>
+                    {% else %}
+                        <a class="btn btn-outline-dark my-1" href="{{ url_for('bp_users.add_track_to_fav', track_id=track.track_id) }}">Add to favourites</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-9 reviews">
+                <!-- Heading -->
+                <div class="row">
+                    <div class="col-9">
+                        <h1>New Review</h1>
+                    </div>
+                </div>
+                <div class="review-object container">
+                    <form method="POST">
+                        <!-- CSRF token -->
+                        {{ form.hidden_tag() }}
+                        <!-- rating fields -->
+                        <fieldset class="form-group">
+                            <div class="row">
+                                <legend class="col-form-label col-sm-2 pt-0">Rating:</legend>
+                                <div class="col-sm-10">
+                                    {% for radio in form.rating_field %}
+                                    <div class="form-check">
+                                        {{ radio() }}
+                                        {{ radio.label }}
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </fieldset>
+                        <div class="form-group row mt-4">
+                            <label for="inputEmail3" class="col-sm-2 col-form-label">Review:</label>
+                            <div class="col-sm-10">
+                                {{ form.text_area(id="text-area", class="form-control", placeholder="Enter review here...") }}
+                            </div>
+                        </div>
+                        <div class="form-group row justify-content-end pt-4">
+                            <div class="col-sm-10">
+                                {{ form.submit_field(class="form-control btn btn-outline-dark", id="submit-btn") }}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
